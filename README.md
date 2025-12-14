@@ -1,2 +1,0 @@
-# littleschool
-School Web
