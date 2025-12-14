@@ -1,0 +1,230 @@
+{
+  "students": [
+    {
+      "id": "std001",
+      "class": "10th Grade",
+      "rollNumber": "R001",
+      "email": "john.doe@example.com",
+      "phone": "9804083117",
+      "address": "124 Main Street, City, State 12345",
+      "admissionDate": "2023-01-05",
+      "isActive": true,
+      "dob": "2018-01-19",
+      "name": "Rahul Kumar Singh"
+    },
+    {
+      "id": "std002",
+      "name": "Jane Smith",
+      "class": "10th Grade",
+      "rollNumber": "R002",
+      "email": "jane.smith@example.com",
+      "phone": "123-456-7891",
+      "address": "456 Oak Avenue, City, State 12346",
+      "admissionDate": "2023-01-20",
+      "isActive": true
+    },
+    {
+      "id": "std003",
+      "name": "Michael Johnson",
+      "class": "11th Grade",
+      "rollNumber": "R003",
+      "email": "michael.johnson@example.com",
+      "phone": "123-456-7892",
+      "address": "789 Pine Road, City, State 12347",
+      "admissionDate": "2022-08-10",
+      "isActive": true
+    },
+    {
+      "id": "std004",
+      "name": "Emily Davis",
+      "class": "9th Grade",
+      "rollNumber": "R004",
+      "email": "emily.davis@example.com",
+      "phone": "123-456-7893",
+      "address": "321 Elm Street, City, State 12348",
+      "admissionDate": "2023-09-01",
+      "isActive": true
+    },
+    {
+      "id": "std005",
+      "name": "David Wilson",
+      "class": "11th Grade",
+      "rollNumber": "R005",
+      "email": "david.wilson@example.com",
+      "phone": "123-456-7894",
+      "address": "654 Maple Drive, City, State 12349",
+      "admissionDate": "2022-08-15",
+      "isActive": true
+    },
+    {
+      "id": "e0f36269-c4c3-4124-a96e-7b78e1e369df",
+      "name": "Rabi",
+      "class": "Nursery",
+      "rollNumber": "1",
+      "email": "r@gmail.com",
+      "phone": "9804083117",
+      "address": "Jagatdal",
+      "admissionDate": "2025-11-16",
+      "isActive": true
+    }
+  ],
+  "teachers": [
+    {
+      "id": "tch001",
+      "name": "Dr. Sarah Anderson",
+      "subject": "Mathematics",
+      "email": "sarah.anderson@school.com",
+      "phone": "234-567-8901",
+      "address": "111 Teacher Lane, City, State 12350",
+      "joiningDate": "2020-01-10",
+      "salary": 5000,
+      "isActive": true
+    },
+    {
+      "id": "tch002",
+      "name": "Prof. Robert Brown",
+      "subject": "Science",
+      "email": "robert.brown@school.com",
+      "phone": "234-567-8902",
+      "address": "222 Educator Street, City, State 12351",
+      "joiningDate": "2019-08-15",
+      "salary": 5500,
+      "isActive": true
+    },
+    {
+      "id": "tch003",
+      "name": "Ms. Lisa Martinez",
+      "subject": "English",
+      "email": "lisa.martinez@school.com",
+      "phone": "234-567-8903",
+      "address": "333 Academic Avenue, City, State 12352",
+      "joiningDate": "2021-02-01",
+      "salary": 4800,
+      "isActive": true
+    },
+    {
+      "id": "tch004",
+      "name": "Mr. James Taylor",
+      "subject": "History",
+      "email": "james.taylor@school.com",
+      "phone": "234-567-8904",
+      "address": "444 Scholar Road, City, State 12353",
+      "joiningDate": "2020-09-01",
+      "salary": 4700,
+      "isActive": true
+    }
+  ],
+  "billing": [
+    {
+      "id": "bill001",
+      "type": "student_fee",
+      "studentId": "std001",
+      "amount": 500,
+      "date": "2024-01-15",
+      "description": "Monthly tuition fee - January 2024"
+    },
+    {
+      "id": "bill002",
+      "type": "student_fee",
+      "studentId": "std002",
+      "amount": 500,
+      "date": "2024-01-15",
+      "description": "Monthly tuition fee - January 2024"
+    },
+    {
+      "id": "bill003",
+      "type": "teacher_salary",
+      "teacherId": "tch001",
+      "amount": 5000,
+      "date": "2024-01-01",
+      "description": "Monthly salary - January 2024"
+    },
+    {
+      "id": "bill004",
+      "type": "teacher_salary",
+      "teacherId": "tch002",
+      "amount": 5500,
+      "date": "2024-01-01",
+      "description": "Monthly salary - January 2024"
+    },
+    {
+      "id": "d315d215-bef1-4377-a7dd-862cf5be969e",
+      "type": "student_fee",
+      "studentId": "std004",
+      "amount": 100,
+      "date": "2025-11-06",
+      "description": "ok"
+    },
+    {
+      "id": "e204f900-c99f-4182-9a8a-db4e0056e5d0",
+      "type": "student_fee",
+      "studentId": "std005",
+      "amount": 100,
+      "date": "2025-11-16",
+      "description": "Nov Month Payment done"
+    },
+    {
+      "id": "d7a840aa-163b-43ed-81f5-123421c8cdc8",
+      "type": "student_fee",
+      "studentId": "std001",
+      "amount": 100,
+      "date": "2025-11-20",
+      "description": "paid"
+    },
+    {
+      "id": "7924acda-103b-42a7-8f95-92379ecb0ced",
+      "type": "student_fee",
+      "studentId": "e0f36269-c4c3-4124-a96e-7b78e1e369df",
+      "amount": 10,
+      "date": "2025-12-13T00:00:00.000Z",
+      "description": "December payment done"
+    },
+    {
+      "id": "a1614570-5f9f-4435-9aef-8a1da064adb7",
+      "type": "student_fee",
+      "studentId": "e0f36269-c4c3-4124-a96e-7b78e1e369df",
+      "amount": 10,
+      "date": "2025-06-17T00:00:00.000Z",
+      "description": "June Payment done"
+    }
+  ],
+  "history": {
+    "students": [
+      {
+        "id": "std_hist001",
+        "name": "Alex Thompson",
+        "class": "12th Grade",
+        "rollNumber": "R100",
+        "email": "alex.thompson@example.com",
+        "phone": "123-456-7000",
+        "address": "999 Graduate Street, City, State 12399",
+        "admissionDate": "2019-08-01",
+        "isActive": false
+      },
+      {
+        "id": "std_hist002",
+        "name": "Sophia Lee",
+        "class": "12th Grade",
+        "rollNumber": "R101",
+        "email": "sophia.lee@example.com",
+        "phone": "123-456-7001",
+        "address": "888 Alumni Avenue, City, State 12398",
+        "admissionDate": "2019-08-05",
+        "isActive": false
+      }
+    ],
+    "teachers": [
+      {
+        "id": "tch_hist001",
+        "name": "Dr. William Clark",
+        "subject": "Physics",
+        "email": "william.clark@school.com",
+        "phone": "234-567-8000",
+        "address": "777 Retired Road, City, State 12397",
+        "joiningDate": "2015-01-10",
+        "salary": 6000,
+        "isActive": false
+      }
+    ]
+  }
+}

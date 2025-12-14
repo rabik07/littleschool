@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        body {
+            background: #f5f7fa;
+        }
+        .navbar {
+            background: #2c3e50;
+            padding: 0;
+            margin-bottom: 30px;
+        }
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+        .logo {
+            color: white;
+            margin: 0;
+            font-size: 24px;
+        }
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 20px;
+        }
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .nav-link:hover {
+            color: #3498db;
+        }
+        .nav-link.active {
+            color: #3498db;
+        }
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .page-header {
+            margin-bottom: 30px;
+        }
+        .page-header h1 {
+            color: #2c3e50;
+            margin: 0 0 10px 0;
+            font-size: 32px;
+        }
+        .filter-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .filter-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .filter-group label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+        .filter-group select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: white;
+        }
+        .filter-group select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+        .table-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .table-header {
+            padding: 20px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        .table-header h2 {
+            margin: 0;
+            color: #2c3e50;
+            font-size: 20px;
+        }
+        .table-responsive {
+            overflow-x: auto;
+        }
+        #historyTable {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+        }
+        #historyTable thead {
+            background: #34495e;
+            color: white;
+        }
+        #historyTable th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        #historyTable td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        #historyTable tbody tr {
+            transition: background-color 0.2s;
+        }
+        #historyTable tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+        #historyTable tbody tr:last-child td {
+            border-bottom: none;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #7f8c8d;
+        }
+        .empty-state p {
+            margin: 0;
+            font-size: 16px;
+        }
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+        .footer p {
+            margin: 0;
+        }
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 15px;
+        }
+        .modal-header h2 {
+            margin: 0;
+            color: #2c3e50;
+            font-size: 22px;
+        }
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #7f8c8d;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-close:hover {
+            color: #2c3e50;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+        .form-error {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #ecf0f1;
+        }
+        .btn-cancel {
+            background: #95a5a6;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-cancel:hover {
+            background: #7f8c8d;
+        }
+        .btn-submit {
+            background: #27ae60;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-submit:hover {
+            background: #229954;
+        }
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 4px;
+            color: white;
+            font-weight: 500;
+            z-index: 2000;
+            animation: slideIn 0.3s ease-out;
+        }
+        .toast.success {
+            background: #27ae60;
+        }
+        .toast.error {
+            background: #e74c3c;
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Inject client data as JS variables -->
+    <script>
+        window.allStudents = JSON.parse('<%- JSON.stringify(studentsForClient || []) %>');
+        window.allBilling = JSON.parse('<%- JSON.stringify(billingRecordsForClient || []) %>');
+        window.allClasses = JSON.parse('<%- JSON.stringify(classes || []) %>');
+        window.allMonths = JSON.parse('<%- JSON.stringify(months || []) %>');
+    </script>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">Little Angle Academy School</h1>
+            <ul class="nav-menu">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/students" class="nav-link">Students</a></li>
+                <li><a href="/teachers" class="nav-link">Teachers</a></li>
+                <li><a href="/billing" class="nav-link active">Billing</a></li>
+                <li><a href="/history" class="nav-link">History</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="page-header">
+            <h1>Student Billing</h1>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label for="filterClass">Class</label>
+                    <select id="filterClass">
+                        <option value="">All Classes</option>
+                        <% (classes || []).forEach(function(cls) { %>
+                            <option value="<%= cls %>"><%= cls %></option>
+                        <% }); %>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterStudent">Student</label>
+                    <select id="filterStudent">
+                        <option value="">All Students</option>
+                        <% (studentsForClient || []).forEach(function(stu) { %>
+                            <option value="<%= stu.id %>"><%= stu.name %> <%= stu.rollNumber ? ('- ' + stu.rollNumber) : '' %></option>
+                        <% }); %>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterMonth">Month</label>
+                    <select id="filterMonth">
+                        <option value="">All Months</option>
+                        <% (months || []).forEach(function(mon) { %>
+                            <option value="<%= mon %>"><%= mon %></option>
+                        <% }); %>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterStatus">Status</label>
+                    <select id="filterStatus">
+                        <option value="all">All</option>
+                        <option value="paid">Paid</option>
+                        <option value="unpaid">Unpaid</option>
+                    </select>
+                </div>
+            </div>
+            <div class="button-group">
+                <button id="resetFilters" class="btn btn-secondary">Reset Filters</button>
+                <button id="printMonthBtn" class="btn btn-primary">Print Report</button>
+                <button id="addPaymentBtn" class="btn btn-primary" style="background: #27ae60;">Add Payment</button>
+            </div>
+        </div>
+
+        <!-- Table Section -->
+        <div class="table-card">
+            <div class="table-header">
+                <h2>Billing Records</h2>
+            </div>
+            <div class="table-responsive">
+                <table id="historyTable">
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Class</th>
+                            <th>Month</th>
+                            <th>Payment Date</th>
+                            <th>Amount</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Payment Modal -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Payment</h2>
+                <button class="modal-close" onclick="closePaymentModal()">×</button>
+            </div>
+            <form id="paymentForm">
+                <div class="form-group">
+                    <label for="modalClass">Class <span style="color: #e74c3c;">*</span></label>
+                    <select id="modalClass" required>
+                        <option value="">Select Class</option>
+                        <% (classes || []).forEach(function(cls) { %>
+                            <option value="<%= cls %>"><%= cls %></option>
+                        <% }); %>
+                    </select>
+                    <div class="form-error" id="classError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="modalStudent">Student <span style="color: #e74c3c;">*</span></label>
+                    <select id="modalStudent" required>
+                        <option value="">Select Student</option>
+                    </select>
+                    <div class="form-error" id="studentError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="paymentAmount">Payment Amount ($) <span style="color: #e74c3c;">*</span></label>
+                    <input type="number" id="paymentAmount" placeholder="Enter amount" step="0.01" min="0" required>
+                    <div class="form-error" id="amountError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="paymentDate">Payment Date <span style="color: #e74c3c;">*</span></label>
+                    <input type="date" id="paymentDate" required>
+                    <div class="form-error" id="dateError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="paymentDescription">Description (Optional)</label>
+                    <input type="text" id="paymentDescription" placeholder="E.g., Monthly fee payment">
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" onclick="closePaymentModal()">Cancel</button>
+                    <button type="submit" class="btn-submit">Submit Payment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Little Angle Academy School. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Billing History Table Population ---
+        (function () {
+            const historyTableBody = document.querySelector('#historyTable tbody');
+            const filterClass = document.getElementById('filterClass');
+            const filterStudent = document.getElementById('filterStudent');
+            const filterMonth = document.getElementById('filterMonth');
+            const filterStatus = document.getElementById('filterStatus');
+            const resetBtn = document.getElementById('resetFilters');
+
+            function monthOf(dateStr) {
+                const d = new Date(dateStr);
+                if (isNaN(d.getTime())) return '';
+                const mm = String(d.getMonth() + 1).padStart(2, '0');
+                const yyyy = d.getFullYear();
+                return `${yyyy}-${mm}`;
+            }
+
+            function renderHistory() {
+                const cls = filterClass ? filterClass.value : '';
+                const sid = filterStudent ? filterStudent.value : '';
+                const mon = filterMonth ? filterMonth.value : '';
+                const status = filterStatus ? filterStatus.value : 'all';
+
+                const fees = window.allBilling.filter(b => b.type === 'student_fee');
+
+                const now = new Date();
+                const year = now.getFullYear();
+                const lastMonth = now.getMonth() + 1;
+                const monthsToShow = [];
+                for (let m = 1; m <= lastMonth; m++) {
+                    monthsToShow.push(`${year}-${String(m).padStart(2, '0')}`);
+                }
+
+                const monthsFiltered = mon ? [mon] : monthsToShow;
+
+                let studentsToShow = [];
+                if (sid) {
+                    const s = window.allStudents.find(st => String(st.id) === String(sid));
+                    if (s) studentsToShow = [s];
+                } else if (cls) {
+                    studentsToShow = window.allStudents.filter(st => st.class === cls);
+                } else {
+                    studentsToShow = window.allStudents.slice();
+                }
+
+                historyTableBody.innerHTML = '';
+
+                if (studentsToShow.length === 0) {
+                    const tr = document.createElement('tr');
+                    const td = document.createElement('td');
+                    td.setAttribute('colspan', '6');
+                    td.style.textAlign = 'center';
+                    td.style.padding = '40px';
+                    td.textContent = 'No students found for selected filters';
+                    tr.appendChild(td);
+                    historyTableBody.appendChild(tr);
+                    return;
+                }
+
+                studentsToShow.forEach(function (student) {
+                    monthsFiltered.forEach(function (monthStr) {
+                        const payments = fees.filter(function (f) {
+                            return String(f.studentId) === String(student.id) && monthOf(f.date) === monthStr;
+                        });
+
+                        const isPaid = payments.length > 0;
+                        if ((status === 'paid' && !isPaid) || (status === 'unpaid' && isPaid)) return;
+
+                        const sum = payments.reduce((s, p) => s + (parseFloat(p.amount) || 0), 0);
+                        let latestDate = '';
+                        if (payments.length > 0) {
+                            latestDate = payments.map(p => p.date).filter(Boolean).sort().slice(-1)[0] || '';
+                        }
+                        const desc = payments.length > 0 ? payments.map(p => p.description || '').filter(Boolean).join('; ') : '-';
+
+                        const tr = document.createElement('tr');
+
+                        const tdStudent = document.createElement('td');
+                        tdStudent.textContent = student.name + (student.rollNumber ? ' - ' + student.rollNumber : '');
+                        tr.appendChild(tdStudent);
+
+                        const tdClass = document.createElement('td');
+                        tdClass.textContent = student.class || '-';
+                        tr.appendChild(tdClass);
+
+                        const tdMonth = document.createElement('td');
+                        tdMonth.textContent = monthStr;
+                        tr.appendChild(tdMonth);
+
+                        const tdDate = document.createElement('td');
+                        tdDate.textContent = latestDate || '-';
+                        tr.appendChild(tdDate);
+
+                        const tdAmount = document.createElement('td');
+                        tdAmount.textContent = '$' + sum.toFixed(2);
+                        tr.appendChild(tdAmount);
+
+                        const tdDesc = document.createElement('td');
+                        tdDesc.textContent = desc;
+                        tr.appendChild(tdDesc);
+
+                        historyTableBody.appendChild(tr);
+                    });
+                });
+            }
+
+            // Wire up filter listeners
+            [filterClass, filterStudent, filterMonth, filterStatus].forEach(function (el) {
+                if (!el) return;
+                el.addEventListener('change', renderHistory);
+            });
+
+            if (resetBtn) {
+                resetBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (filterClass) filterClass.value = '';
+                    if (filterStudent) filterStudent.value = '';
+                    if (filterMonth) filterMonth.value = '';
+                    if (filterStatus) filterStatus.value = 'all';
+                    renderHistory();
+                });
+            }
+
+            // Print button logic
+            const printBtn = document.getElementById('printMonthBtn');
+            if (printBtn) {
+                printBtn.addEventListener('click', function () {
+                    const table = document.getElementById('historyTable');
+                    const win = window.open('', '', 'width=900,height=700');
+                    win.document.write('<html><head><title>Print Billing Report</title>');
+                    win.document.write('<style>body { font-family: Arial, sans-serif; } table { border-collapse: collapse; width: 100%; } th, td { border: 1px solid #ccc; padding: 10px; text-align: left; } th { background: #34495e; color: white; } h3 { color: #2c3e50; }</style>');
+                    win.document.write('</head><body>');
+                    win.document.write('<h3>Student Billing Report</h3>');
+                    win.document.write(table.outerHTML);
+                    win.document.write('</body></html>');
+                    win.document.close();
+                    win.focus();
+                    win.print();
+                });
+            }
+
+            // Initial render
+            renderHistory();
+        })();
+
+        // --- Modal and Payment Form ---
+        function openPaymentModal() {
+            document.getElementById('paymentModal').classList.add('active');
+            // Set today's date as default
+            document.getElementById('paymentDate').valueAsDate = new Date();
+            clearPaymentForm();
+        }
+
+        function closePaymentModal() {
+            document.getElementById('paymentModal').classList.remove('active');
+            clearPaymentForm();
+        }
+
+        function clearPaymentForm() {
+            document.getElementById('paymentForm').reset();
+            document.getElementById('paymentDate').valueAsDate = new Date();
+            clearFormErrors();
+        }
+
+        function clearFormErrors() {
+            document.getElementById('classError').textContent = '';
+            document.getElementById('studentError').textContent = '';
+            document.getElementById('amountError').textContent = '';
+            document.getElementById('dateError').textContent = '';
+        }
+
+        function showToast(message, type) {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // Populate students when class is selected
+        document.getElementById('modalClass').addEventListener('change', function() {
+            const selectedClass = this.value;
+            const studentSelect = document.getElementById('modalStudent');
+            studentSelect.innerHTML = '<option value="">Select Student</option>';
+            
+            if (selectedClass) {
+                const studentsInClass = window.allStudents.filter(s => s.class === selectedClass);
+                studentsInClass.forEach(function(student) {
+                    const option = document.createElement('option');
+                    option.value = student.id;
+                    option.textContent = student.name + (student.rollNumber ? (' - ' + student.rollNumber) : '');
+                    studentSelect.appendChild(option);
+                });
+            }
+        });
+
+        // Handle payment form submission
+        document.getElementById('paymentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            clearFormErrors();
+            
+            const classVal = document.getElementById('modalClass').value;
+            const studentVal = document.getElementById('modalStudent').value;
+            const amountVal = document.getElementById('paymentAmount').value;
+            const dateVal = document.getElementById('paymentDate').value;
+            const descriptionVal = document.getElementById('paymentDescription').value || 'Student Fee Payment';
+            
+            // Validation
+            let hasError = false;
+            
+            if (!classVal) {
+                document.getElementById('classError').textContent = 'Please select a class';
+                hasError = true;
+            }
+            
+            if (!studentVal) {
+                document.getElementById('studentError').textContent = 'Please select a student';
+                hasError = true;
+            }
+            
+            if (!amountVal || parseFloat(amountVal) <= 0) {
+                document.getElementById('amountError').textContent = 'Please enter a valid amount greater than 0';
+                hasError = true;
+            }
+            
+            if (!dateVal) {
+                document.getElementById('dateError').textContent = 'Please select a payment date';
+                hasError = true;
+            }
+            
+            if (hasError) return;
+            
+            // Find the selected student
+            const student = window.allStudents.find(s => String(s.id) === String(studentVal));
+            
+            // Prepare payment data
+            const paymentData = {
+                studentId: studentVal,
+                amount: parseFloat(amountVal),
+                date: dateVal,
+                description: descriptionVal,
+                type: 'student_fee'
+            };
+            
+            // Send to server
+            fetch('/billing/add-payment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(paymentData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('Payment recorded successfully!', 'success');
+                    closePaymentModal();
+                    
+                    // Refresh the billing data
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
+                } else {
+                    showToast('Error: ' + (data.message || 'Failed to record payment'), 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('Error: ' + error.message, 'error');
+            });
+        });
+
+        // Close modal when clicking outside of it
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('paymentModal');
+            if (event.target === modal) {
+                closePaymentModal();
+            }
+        });
+
+        // Add Payment button click handler
+        document.getElementById('addPaymentBtn').addEventListener('click', openPaymentModal);
+    </script>
+</body>
+</html>

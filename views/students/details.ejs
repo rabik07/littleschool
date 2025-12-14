@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">Little Angle Academy School</h1>
+            <ul class="nav-menu">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/students" class="nav-link">Students</a></li>
+                <li><a href="/teachers" class="nav-link">Teachers</a></li>
+                <li><a href="/billing" class="nav-link">Billing</a></li>
+                <li><a href="/history" class="nav-link">History</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h2>Student Details</h2>
+                <a href="/students" class="btn btn-secondary">Back to List</a>
+                <button id="editBtn" class="btn btn-primary" style="margin-left:10px;">Edit</button>
+                <button id="saveBtn" class="btn btn-success" style="margin-left:10px; display:none;">Save</button>
+                <button id="cancelBtn" class="btn btn-warning" style="margin-left:10px; display:none;">Cancel</button>
+            </div>
+
+            <div class="details-card">
+                <h3 id="studentName"><span id="nameSpan"><%= student.name %></span></h3>
+                <div id="err-name" class="field-error" style="display:none;color:#d9534f;font-size:0.9rem;margin-top:6px"></div>
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <strong>Roll Number:</strong>
+                        <span class="field" data-field="rollNumber"><%= student.rollNumber %></span>
+                        <div id="err-rollNumber" class="field-error" style="display:none;color:#d9534f;font-size:0.9rem;margin-top:6px"></div>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Class:</strong>
+                        <span class="field" data-field="class"><%= student.class %></span>
+                        <div id="err-class" class="field-error" style="display:none;color:#d9534f;font-size:0.9rem;margin-top:6px"></div>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Email:</strong>
+                        <span class="field" data-field="email"><%= student.email %></span>
+                        <div id="err-email" class="field-error" style="display:none;color:#d9534f;font-size:0.9rem;margin-top:6px"></div>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Phone:</strong>
+                        <span class="field" data-field="phone"><%= student.phone %></span>
+                        <div id="err-phone" class="field-error" style="display:none;color:#d9534f;font-size:0.9rem;margin-top:6px"></div>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Address:</strong>
+                        <span class="field" data-field="address"><%= student.address %></span>
+                        <div id="err-address" class="field-error" style="display:none;color:#d9534f;font-size:0.9rem;margin-top:6px"></div>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Date of Birth:</strong>
+                        <span class="field" data-field="dob"><%= student.dob ? student.dob : '-' %></span>
+                        <div id="err-dob" class="field-error" style="display:none;color:#d9534f;font-size:0.9rem;margin-top:6px"></div>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Admission Date:</strong>
+                        <span class="field" data-field="admissionDate"><%= student.admissionDate %></span>
+                        <div id="err-admissionDate" class="field-error" style="display:none;color:#d9534f;font-size:0.9rem;margin-top:6px"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Little Angle Academy School. All rights reserved.</p>
+        </div>
+    </footer>
+    <style>
+        /* simple toast */
+        #saveToast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #323232;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 4px;
+            display: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            z-index: 2000;
+        }
+        #saveToast.success { background: #28a745; }
+        #saveToast.error { background: #d9534f; }
+        .field-error { margin-top:6px; }
+    </style>
+
+    <div id="saveToast" role="status"></div>
+
+    <script>
+        (function() {
+            const editBtn = document.getElementById('editBtn');
+            const saveBtn = document.getElementById('saveBtn');
+            const cancelBtn = document.getElementById('cancelBtn');
+            const fields = Array.from(document.querySelectorAll('.field'));
+            const original = {};
+            const studentId = '<%= student._id %>';
+
+            function toInput(span) {
+                const key = span.getAttribute('data-field');
+                const value = span.textContent === '-' ? '' : span.textContent;
+                let input;
+                if (key === 'dob' || key === 'admissionDate') {
+                    input = document.createElement('input');
+                    input.type = 'date';
+                    input.value = value;
+                } else if (key === 'address') {
+                    input = document.createElement('textarea');
+                    input.rows = 2;
+                    input.value = value;
+                } else {
+                    input = document.createElement('input');
+                    input.type = 'text';
+                    input.value = value;
+                }
+                input.className = 'edit-input';
+                input.setAttribute('data-field', key);
+                span.parentNode.replaceChild(input, span);
+            }
+
+            function toSpan(input) {
+                const key = input.getAttribute('data-field');
+                const span = document.createElement('span');
+                span.className = 'field';
+                span.setAttribute('data-field', key);
+                span.textContent = input.value || '-';
+                input.parentNode.replaceChild(span, input);
+            }
+
+            editBtn.addEventListener('click', function() {
+                // store originals
+                fields.forEach(f => { original[f.getAttribute('data-field')] = f.textContent; });
+                // convert fields to inputs except rollNumber (read-only)
+                fields.forEach(f => {
+                    const key = f.getAttribute('data-field');
+                    if (key === 'rollNumber') {
+                        // replace with disabled input showing value
+                        const val = f.textContent === '-' ? '' : f.textContent;
+                        const input = document.createElement('input');
+                        input.type = 'text';
+                        input.value = val;
+                        input.className = 'edit-input';
+                        input.setAttribute('data-field', key);
+                        input.disabled = true;
+                        f.parentNode.replaceChild(input, f);
+                    } else {
+                        toInput(f);
+                    }
+                });
+
+                // make name editable
+                const nameSpan = document.getElementById('nameSpan');
+                const nameVal = nameSpan.textContent || '';
+                original['name'] = nameVal;
+                const nameInput = document.createElement('input');
+                nameInput.type = 'text';
+                nameInput.id = 'nameInput';
+                nameInput.value = nameVal;
+                nameInput.style.fontSize = '1.25rem';
+                nameSpan.parentNode.replaceChild(nameInput, nameSpan);
+
+                editBtn.style.display = 'none';
+                saveBtn.style.display = 'inline-block';
+                cancelBtn.style.display = 'inline-block';
+            });
+
+            cancelBtn.addEventListener('click', function() {
+                // revert inputs back to spans with original values
+                const inputs = Array.from(document.querySelectorAll('.edit-input'));
+                inputs.forEach(inp => {
+                    const key = inp.getAttribute('data-field');
+                    const span = document.createElement('span');
+                    span.className = 'field';
+                    span.setAttribute('data-field', key);
+                    span.textContent = original[key] || '-';
+                    inp.parentNode.replaceChild(span, inp);
+                });
+                // revert name
+                const nameInput = document.getElementById('nameInput');
+                if (nameInput) {
+                    const span = document.createElement('span');
+                    span.id = 'nameSpan';
+                    span.textContent = original['name'] || '';
+                    nameInput.parentNode.replaceChild(span, nameInput);
+                }
+                editBtn.style.display = 'inline-block';
+                saveBtn.style.display = 'none';
+                cancelBtn.style.display = 'none';
+            });
+
+            saveBtn.addEventListener('click', function() {
+                const inputs = Array.from(document.querySelectorAll('.edit-input'));
+                const payload = {};
+                inputs.forEach(inp => { payload[inp.getAttribute('data-field')] = inp.value; });
+                // include name
+                const nameInput = document.getElementById('nameInput');
+                if (nameInput) payload['name'] = nameInput.value;
+
+                // clear field errors
+                ['name','class','email','phone','address','dob','admissionDate'].forEach(k => {
+                    const el = document.getElementById('err-' + k);
+                    if (el) { el.style.display = 'none'; el.textContent = ''; }
+                });
+
+                // client-side validation: name required
+                if (!payload.name || String(payload.name).trim() === '') {
+                    const el = document.getElementById('err-name');
+                    if (el) { el.textContent = 'Name is required'; el.style.display = 'block'; }
+                    return;
+                }
+
+                if (payload.email) {
+                    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRe.test(String(payload.email))) {
+                        const el = document.getElementById('err-email');
+                        if (el) { el.textContent = 'Please enter a valid email address'; el.style.display = 'block'; }
+                        return;
+                    }
+                }
+
+                if (payload.phone) {
+                    const digits = String(payload.phone).replace(/\D/g, '');
+                    if (digits.length !== 10) {
+                        const el = document.getElementById('err-phone');
+                        if (el) { el.textContent = 'Phone number must be exactly 10 digits'; el.style.display = 'block'; }
+                        return;
+                    }
+                    if (!/^\d{10}$/.test(digits)) {
+                        const el = document.getElementById('err-phone');
+                        if (el) { el.textContent = 'Phone number must contain only digits'; el.style.display = 'block'; }
+                        return;
+                    }
+                }
+
+                fetch('/students/' + studentId, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                })
+                .then(res => {
+                    if (!res.ok) {
+                        return res.text().then(text => { throw new Error(text || ('HTTP ' + res.status)); });
+                    }
+                    return res.text().then(txt => {
+                        try { return JSON.parse(txt); } catch (e) { return { success: false, message: txt || 'Invalid server response' }; }
+                    });
+                })
+                .then(data => {
+                    if (data && data.success) {
+                        const inputsNow = Array.from(document.querySelectorAll('.edit-input'));
+                        inputsNow.forEach(inp => toSpan(inp));
+                        editBtn.style.display = 'inline-block';
+                        saveBtn.style.display = 'none';
+                        cancelBtn.style.display = 'none';
+                        const nameInputNow = document.getElementById('nameInput');
+                        if (data.student && data.student.name) {
+                            const span = document.createElement('span');
+                            span.id = 'nameSpan';
+                            span.textContent = data.student.name;
+                            if (nameInputNow) nameInputNow.parentNode.replaceChild(span, nameInputNow);
+                            else document.getElementById('studentName').textContent = data.student.name;
+                        } else if (nameInputNow) {
+                            const span = document.createElement('span');
+                            span.id = 'nameSpan';
+                            span.textContent = nameInputNow.value || '';
+                            nameInputNow.parentNode.replaceChild(span, nameInputNow);
+                        }
+                        showToast('Saved successfully', 'success');
+                    } else {
+                        console.error('Save response:', data);
+                        const msg = (data && (data.error || data.message)) || 'Failed to save student details';
+                        // set field-specific errors when possible
+                        const low = String(msg).toLowerCase();
+                        if (low.includes('email')) { const el = document.getElementById('err-email'); if (el) { el.textContent = msg; el.style.display = 'block'; } }
+                        else if (low.includes('phone')) { const el = document.getElementById('err-phone'); if (el) { el.textContent = msg; el.style.display = 'block'; } }
+                        else if (low.includes('roll')) { const el = document.getElementById('err-rollNumber'); if (el) { el.textContent = msg; el.style.display = 'block'; } }
+                        showToast(msg, 'error');
+                    }
+                }).catch(err => { console.error('Save error:', err); const m = (err && err.message) ? err.message : 'unknown'; showToast('Error saving details: ' + m, 'error'); });
+            });
+        })();
+    </script>
+</body>
+</html>

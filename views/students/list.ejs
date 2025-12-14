@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">Little Angle Academy School</h1>
+            <ul class="nav-menu">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/students" class="nav-link">Students</a></li>
+                <li><a href="/teachers" class="nav-link">Teachers</a></li>
+                <li><a href="/billing" class="nav-link">Billing</a></li>
+                <li><a href="/history" class="nav-link">History</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h2>Students List</h2>
+                <a href="/students/new" class="btn btn-primary">Add New Student</a>
+                <button id="moveToHistoryBtn" class="btn btn-danger" style="float:right; margin-left: 10px;">Move to History</button>
+            </div>
+
+            <div class="filter-section">
+                <label>Filter by Class:</label>
+                <select id="classFilter" onchange="filterByClass()">
+                    <option value="all" <% if (selectedClass === 'all') { %>selected<% } %>>All Classes</option>
+                    <% classes.forEach(function(cls) { %>
+                        <option value="<%= cls %>" <% if (selectedClass === cls) { %>selected<% } %>><%= cls %></option>
+                    <% }); %>
+                </select>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Roll Number</th>
+                        <th>Name</th>
+                        <th>Class</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (students.length === 0) { %>
+                        <tr>
+                            <td colspan="7" class="text-center">No students found</td>
+                        </tr>
+                    <% } else { %>
+                        <% students.forEach(function(student) { %>
+                            <tr>
+                                <td><input type="checkbox" class="student-checkbox" value="<%= student._id %>"></td>
+                                <td><%= student.rollNumber %></td>
+                                <td><%= student.name %></td>
+                                <td><%= student.class %></td>
+                                <td><%= student.email %></td>
+                                <td><%= student.phone %></td>
+                                <td>
+                                    <a href="/students/<%= student._id %>" class="btn btn-sm btn-info">View Details</a>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Little Angle Academy School. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function filterByClass() {
+            const selectedClass = document.getElementById('classFilter').value;
+            window.location.href = selectedClass === 'all' ? '/students' : '/students?class=' + selectedClass;
+        }
+
+        // Batch Move to History
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('moveToHistoryBtn').addEventListener('click', function() {
+                const checked = Array.from(document.querySelectorAll('.student-checkbox:checked'));
+                if (checked.length === 0) {
+                    alert('Please select at least one student to move to history.');
+                    return;
+                }
+                if (!confirm('Move selected student(s) to history?')) return;
+                const ids = checked.map(cb => cb.value);
+                fetch('/students/move-to-history', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ids })
+                })
+                .then(res => {
+                    if (res.ok) {
+                        window.location.reload();
+                    } else {
+                        alert('Failed to move students to history');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

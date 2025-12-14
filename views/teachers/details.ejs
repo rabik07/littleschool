@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">Little Angle Academy School</h1>
+            <ul class="nav-menu">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/students" class="nav-link">Students</a></li>
+                <li><a href="/teachers" class="nav-link">Teachers</a></li>
+                <li><a href="/billing" class="nav-link">Billing</a></li>
+                <li><a href="/history" class="nav-link">History</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h2>Teacher Details</h2>
+                <a href="/teachers" class="btn btn-secondary">Back to List</a>
+            </div>
+
+            <div class="details-card">
+                <h3><%= teacher.name %></h3>
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <strong>Subject:</strong>
+                        <span><%= teacher.subject %></span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Email:</strong>
+                        <span><%= teacher.email %></span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Phone:</strong>
+                        <span><%= teacher.phone %></span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Address:</strong>
+                        <span><%= teacher.address %></span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Joining Date:</strong>
+                        <span><%= teacher.joiningDate %></span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Salary:</strong>
+                        <span>$<%= (parseFloat(teacher.salary) || 0).toFixed(2) %></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Little Angle Academy School. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

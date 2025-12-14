@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">Little Angle Academy School</h1>
+            <ul class="nav-menu">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/students" class="nav-link">Students</a></li>
+                <li><a href="/teachers" class="nav-link">Teachers</a></li>
+                <li><a href="/billing" class="nav-link">Billing</a></li>
+                <li><a href="/history" class="nav-link">History</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h2>Teachers List</h2>
+                <a href="/teachers/new" class="btn btn-primary">Add New Teacher</a>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Subject</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Salary</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (teachers.length === 0) { %>
+                        <tr>
+                            <td colspan="6" class="text-center">No teachers found</td>
+                        </tr>
+                    <% } else { %>
+                        <% teachers.forEach(function(teacher) { %>
+                            <tr>
+                                <td><%= teacher.name %></td>
+                                <td><%= teacher.subject %></td>
+                                <td><%= teacher.email %></td>
+                                <td><%= teacher.phone %></td>
+                                <td>$<%= (parseFloat(teacher.salary) || 0).toFixed(2) %></td>
+                                <td>
+                                    <a href="/teachers/<%= teacher._id %>" class="btn btn-sm btn-info">View Details</a>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Little Angle Academy School. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

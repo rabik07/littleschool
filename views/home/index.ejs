@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">Little Angle Academy School</h1>
+            <ul class="nav-menu">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/students" class="nav-link">Students</a></li>
+                <li><a href="/teachers" class="nav-link">Teachers</a></li>
+                <li><a href="/billing" class="nav-link">Billing</a></li>
+                <li><a href="/history" class="nav-link">History</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="home-container">
+            <div class="container">
+                <h2>Welcome to Little Angle Academy School</h2>
+                <!-- Achievement Carousel Section -->
+                <div class="carousel-container" style="margin: 2rem 0;">
+                    <h3 style="text-align:center;">School Achievements</h3>
+                    <div class="carousel" id="achievementCarousel" style="position:relative;max-width:800px;margin:0 auto;">
+                        <img class="carousel-image" src="/public/img/achievement1.jpg" alt="Achievement 1" style="width:100%;height:400px;object-fit:cover;display:block;">
+                        <img class="carousel-image" src="/public/img/achievement2.jpg" alt="Achievement 2" style="width:100%;height:400px;object-fit:cover;display:none;">
+                        <img class="carousel-image" src="/public/img/achievement3.jpg" alt="Achievement 3" style="width:100%;height:400px;object-fit:cover;display:none;">
+                        <button class="carousel-btn" id="prevBtn" style="position:absolute;top:50%;left:10px;transform:translateY(-50%);background:#333;color:#fff;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;">&#10094;</button>
+                        <button class="carousel-btn" id="nextBtn" style="position:absolute;top:50%;right:10px;transform:translateY(-50%);background:#333;color:#fff;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;">&#10095;</button>
+                    </div>
+                </div>
+                <div class="welcome-text">
+                    <p>We are committed to providing quality education and nurturing young minds.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Simple JS Carousel for Achievements
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('.carousel-image');
+            let current = 0;
+            function showImage(idx) {
+                images.forEach((img, i) => {
+                    img.style.display = (i === idx) ? 'block' : 'none';
+                });
+            }
+            document.getElementById('prevBtn').onclick = function() {
+                current = (current - 1 + images.length) % images.length;
+                showImage(current);
+            };
+            document.getElementById('nextBtn').onclick = function() {
+                current = (current + 1) % images.length;
+                showImage(current);
+            };
+            // Auto-advance every 4 seconds
+            setInterval(function() {
+                current = (current + 1) % images.length;
+                showImage(current);
+            }, 4000);
+            showImage(current);
+        });
+    </script>
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Little Angle Academy School. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
