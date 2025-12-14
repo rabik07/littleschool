@@ -170,7 +170,7 @@ export class BillingController {
           type: 'student_fee',
           studentId: new mongoose.Types.ObjectId(studentId),
           amount: parseFloat(amount),
-          date: new Date(date),
+          date: String(date),
           description: description || 'Student Fee Payment'
         });
       } else {
@@ -185,7 +185,7 @@ export class BillingController {
           type: 'student_fee',
           studentId: studentId,
           amount: parseFloat(amount),
-          date: new Date(date),
+          date: String(date),
           description: description || 'Student Fee Payment'
         } as any);
       }
