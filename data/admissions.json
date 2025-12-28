@@ -1,0 +1,34 @@
+[
+  {
+    "id": "a21e9e7f-b515-44f9-b10a-7c85431f5e9e",
+    "data": {
+      "studentName": "Rabi",
+      "regNo": "122",
+      "dob": "",
+      "fatherName": "",
+      "motherName": "Siya",
+      "address": "",
+      "phone": "",
+      "guardian": "",
+      "altAddress": "",
+      "altPhone": "",
+      "category": "",
+      "caste": "",
+      "evidence": "",
+      "bloodGroup": "",
+      "aadharStudent": "",
+      "aadharFather": "",
+      "aadharMother": "",
+      "classApply": "1",
+      "declarationName": "",
+      "declarationDate": "2025-12-15",
+      "admitClass": "",
+      "admitSection": "",
+      "admitRoll": "",
+      "admitDate": "",
+      "status": "draft"
+    },
+    "status": "draft",
+    "submittedAt": "2025-12-28T01:40:05.561Z"
+  }
+]

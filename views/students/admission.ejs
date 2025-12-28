@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admission Form</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    /* Compact styling and print rules to fit the form on a single printed page */
+    body, .admission-container { font-family: Arial,Helvetica,sans-serif; font-size:12px; color:#222 }
+    .admission-container { max-width: 800px; margin: 10px auto; background: white; padding: 12px; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.06);}    
+    .form-row { display:flex; gap:8px; margin-bottom:8px; }
+    .form-col { flex:1; display:flex; flex-direction:column; }
+    label { font-weight:600; margin-bottom:4px; font-size:12px; }
+    input[type=text], input[type=date], select, textarea { padding:6px; border:1px solid #ccc; border-radius:3px; font-size:12px; }
+    textarea { min-height:60px; resize:vertical; }
+    .actions { display:flex; gap:8px; margin-top:10px; }
+    .btn { padding:6px 10px; border-radius:4px; border:none; cursor:pointer; font-weight:600; font-size:12px }
+    .btn-primary { background:#3498db; color:white; }
+    .btn-success { background:#27ae60; color:white; }
+    .btn-secondary { background:#95a5a6; color:white; }
+
+    .preview-area { margin-top:14px; border:1px dashed #ddd; padding:10px; background:#fafafa }
+    .toast { position:fixed; right:16px; bottom:16px; padding:10px 12px; border-radius:4px; color:white }
+    .toast.success{ background:#27ae60 }
+
+    /* Print-specific adjustments */
+    @page { size: A4 portrait; margin: 10mm }
+    @media print {
+      html,body { width:210mm; height:297mm; }
+      .no-print, #preview, #toastContainer { display:none !important }
+      body { background: white }
+      .admission-container { box-shadow:none; max-width:100%; padding:8px; font-size:11px; }
+      .form-row { gap:6px; margin-bottom:6px }
+      label { font-size:11px }
+      input, textarea, select { font-size:11px; padding:4px }
+      img { max-width:100%; height:auto }
+      /* avoid breaking the main container across pages */
+      .admission-container { page-break-inside: avoid; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="admission-container">
+    <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:12px;">
+        <div style="flex:0 0 90px;">
+        <img src="/images/logo.png" alt="School Logo" style="width:90px;height:90px;object-fit:contain;" onerror="this.onerror=null; this.src='/images/logo.svg'" />
+      </div>
+      <div style="flex:1;text-align:center">
+        <div style="font-size:20px;font-weight:700;color:#2c3e50">LITTLE ANGELS ACADEMY</div>
+        <div style="font-size:12px;color:#555;margin-top:4px">Sthirpara, Dakhin Pally, Post: Mondalpara</div>
+        <div style="font-size:12px;color:#555">Dist : North 24 Parganas, Pin : 743127, West Bengal</div>
+        <h2 style="margin-top:8px;color:#2c3e50">APPLICATION FOR ADMISSION</h2>
+      </div>
+      <div style="flex:0 0 120px;text-align:center">
+        <div id="photoBox" style="border:2px solid #ccc;width:100px;height:100px;display:inline-block;overflow:hidden;">
+          <img id="photoPreview" src="" alt="Photo" style="width:100%;height:100%;object-fit:cover;display:block;" />
+        </div>
+        <div style="margin-top:6px;">
+          <input id="photoInput" name="photoFile" type="file" accept="image/*" class="no-print" />
+          <input id="photoData" name="photoData" type="hidden" />
+        </div>
+      </div>
+    </div>
+
+    <form id="admissionForm">
+      <div class="form-row">
+        <div class="form-col">
+          <label for="studentName">1. Name of the Student (In Block Letters)</label>
+          <input id="studentName" name="studentName" type="text" />
+        </div>
+        <div class="form-col">
+          <label for="regNo">Reg. No.</label>
+          <input id="regNo" name="regNo" type="text" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-col">
+          <label for="dob">2. Date of Birth</label>
+          <input id="dob" name="dob" type="date" />
+        </div>
+        <div class="form-col">
+          <label for="fatherName">3. Father's Name & Occupation</label>
+          <input id="fatherName" name="fatherName" type="text" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-col">
+          <label for="motherName">4. Mother's Name</label>
+          <input id="motherName" name="motherName" type="text" />
+        </div>
+        <div class="form-col">
+          <label for="address">5. Address (In Full)</label>
+          <textarea id="address" name="address"></textarea>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-col">
+          <label for="phone">6. Phone No.</label>
+          <input id="phone" name="phone" type="text" />
+        </div>
+        <div class="form-col">
+          <label for="guardian">7. Guardian's Name, Occupation & Relationship with student</label>
+          <input id="guardian" name="guardian" type="text" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-col">
+          <label for="altAddress">8. Alternative Address (In Full)</label>
+          <input id="altAddress" name="altAddress" type="text" />
+        </div>
+        <div class="form-col">
+          <label for="altPhone">9. Alternative Phone No.</label>
+          <input id="altPhone" name="altPhone" type="text" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-col">
+          <label for="category">10. Category (General / SC / ST / OBC / Minority / PH) :</label>
+          <div style="display:flex; gap:8px; align-items:center"><input id="category" name="category" type="text" style="flex:1" /><span style="margin-left:6px">Caste:</span><input id="caste" name="caste" type="text" style="flex:1" /></div>
+        </div>
+        <div class="form-col">
+          <label for="evidence">11. Evidence of Age</label>
+          <input id="evidence" name="evidence" type="text" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-col">
+          <label for="bloodGroup">12. Blood Group</label>
+          <input id="bloodGroup" name="bloodGroup" type="text" />
+        </div>
+        <div class="form-col">
+          <label for="aadharStudent">13. Aadhar No. (Student)</label>
+          <input id="aadharStudent" name="aadharStudent" type="text" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-col">
+          <label for="aadharFather">Aadhar No. (Father)</label>
+          <input id="aadharFather" name="aadharFather" type="text" />
+        </div>
+        <div class="form-col">
+          <label for="aadharMother">Aadhar No. (Mother)</label>
+          <input id="aadharMother" name="aadharMother" type="text" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-col">
+          <label for="classApply">14. The Class to which student seeks admission</label>
+          <input id="classApply" name="classApply" type="text" />
+        </div>
+        <div class="form-col">
+          <label for="declaration">I solemnly declare that the particulars furnished above about</label>
+          <input id="declarationName" name="declarationName" type="text" placeholder="Mr. / Miss (Name)" />
+        </div>
+      </div>
+
+      <div style="margin-top:8px;">
+        <label>Date :</label>
+        <input type="date" id="declarationDate" name="declarationDate" />
+      </div>
+
+      <div style="margin-top:18px; display:flex; align-items:center; justify-content:space-between;">
+        <div></div>
+        <div style="text-align:center">
+          <div>Signature of Father / Mother / Guardian</div>
+          <div style="margin-top:30px; border-top:1px solid #ccc; width:260px;">&nbsp;</div>
+        </div>
+      </div>
+
+      <hr style="margin:18px 0" />
+
+      <div style="display:flex; gap:12px;">
+        <div style="flex:1">
+          <label>The student is Admitted to Class :</label>
+          <input id="admitClass" name="admitClass" type="text" />
+        </div>
+        <div style="flex:1">
+          <label>Section :</label>
+          <input id="admitSection" name="admitSection" type="text" />
+        </div>
+        <div style="flex:1">
+          <label>Roll No. :</label>
+          <input id="admitRoll" name="admitRoll" type="text" />
+        </div>
+      </div>
+
+      <div style="margin-top:8px;">
+        <label>Date :</label>
+        <input type="date" id="admitDate" name="admitDate" />
+      </div>
+
+      <div style="margin-top:12px; text-align:right;">
+        <div style="display:inline-block; border-top:1px solid #ccc; padding-top:6px;">Head Teacher / T.I.C.</div>
+      </div>
+
+      <div class="actions no-print">
+        <button type="button" id="printEmpty" class="btn btn-secondary">Print Empty Form</button>
+        <button type="button" id="printFilled" class="btn btn-primary">Print Filled Form</button>
+        <button type="button" id="previewBtn" class="btn btn-primary">Preview</button>
+        <button type="button" id="saveBtn" class="btn btn-secondary">Save</button>
+        <button type="submit" id="submitBtn" class="btn btn-success">Submit</button>
+      </div>
+
+    </form>
+
+    <div id="preview" class="preview-area" style="display:none"></div>
+  </div>
+
+  <div id="toastContainer"></div>
+
+  <script>
+    function showToast(msg) {
+      const t = document.createElement('div');
+      t.className = 'toast success';
+      t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 2500);
+    }
+
+    // Print empty form
+    document.getElementById('printEmpty').addEventListener('click', function() {
+      window.print();
+    });
+
+    // Print filled form: clone container, replace inputs with values, open printable window
+    document.getElementById('printFilled').addEventListener('click', function() {
+      const orig = document.querySelector('.admission-container');
+      const clone = orig.cloneNode(true);
+      // remove interactive elements and replace visible inputs/textareas/selects with plain text
+      clone.querySelectorAll('button, .no-print, input, textarea, select').forEach(el => {
+        const tag = el.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') {
+          const type = (el.getAttribute('type') || '').toLowerCase();
+          // remove hidden fields and file inputs (we don't want raw data URLs printed)
+          if (type === 'hidden' || type === 'file') { el.remove(); return; }
+          // replace visible inputs with plain text divs
+          const span = document.createElement('div');
+          span.style.minHeight = '16px';
+          span.style.padding = '1px 0';
+          span.style.fontSize = '13px';
+          span.textContent = el.value || '';
+          el.parentNode.replaceChild(span, el);
+        } else {
+          // remove buttons and other controls
+          el.remove();
+        }
+      });
+
+      // ensure cloned images keep their data URLs (no accidental text fields remain)
+      clone.querySelectorAll('img').forEach(img => { if (img.src) img.src = img.src; });
+
+      const win = window.open('', '_blank');
+      const doc = win.document;
+      const styles = Array.from(document.querySelectorAll('style, link[rel="stylesheet"]')).map(n => n.outerHTML).join('\n');
+      doc.open();
+      doc.write('<!doctype html><html><head><meta charset="utf-8"><title>Print - Admission</title>' + styles + '</head><body>' + clone.outerHTML + '</body></html>');
+      doc.close();
+      // give browser a moment to render
+      setTimeout(() => { win.focus(); win.print(); }, 250);
+    });
+
+    // Preview: render filled values into preview area
+    document.getElementById('previewBtn').addEventListener('click', function() {
+      const data = Object.fromEntries(new FormData(document.getElementById('admissionForm')).entries());
+      const preview = document.getElementById('preview');
+      preview.style.display = 'block';
+      preview.innerHTML = `<h3>Admission Preview</h3>` + Object.keys(data).map(k => `<p><strong>${k}:</strong> ${data[k] || '-'}</p>`).join('');
+      preview.scrollIntoView({behavior:'smooth'});
+    });
+
+    // Save (save as draft) via POST
+    document.getElementById('saveBtn').addEventListener('click', function() {
+      const payload = Object.fromEntries(new FormData(document.getElementById('admissionForm')).entries());
+      payload.status = 'draft';
+      fetch('/students/admission/submit', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      }).then(r=>r.json()).then(j=>{
+        if (j.success) showToast('Saved draft successfully'); else alert('Save failed');
+      }).catch(err=>{console.error(err); alert('Save failed');});
+    });
+
+    // Submit form
+    document.getElementById('admissionForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const payload = Object.fromEntries(new FormData(document.getElementById('admissionForm')).entries());
+      payload.status = 'submitted';
+      fetch('/students/admission/submit', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      }).then(r=>r.json()).then(j=>{
+        if (j.success) {
+          showToast('Application submitted');
+          setTimeout(()=> { window.location.href = '/students'; }, 1200);
+        } else alert('Submit failed');
+      }).catch(err=>{console.error(err); alert('Submit failed');});
+    });
+
+    // Photo input handling: preview and store base64 in hidden input for JSON submission
+    const photoInput = document.getElementById('photoInput');
+    const photoPreview = document.getElementById('photoPreview');
+    const photoData = document.getElementById('photoData');
+    photoInput.addEventListener('change', function() {
+      const f = this.files && this.files[0];
+      if (!f) return;
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        const dataUrl = ev.target.result;
+        photoPreview.src = dataUrl;
+        photoData.value = dataUrl; // include as form field
+      };
+      reader.readAsDataURL(f);
+    });
+  </script>
+</body>
+</html>

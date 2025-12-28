@@ -13,10 +13,12 @@ router.get('/', HomeController.index);
 // Student routes
 router.get('/students', StudentController.list);
 router.get('/students/new', StudentController.showForm);
+router.get('/students/admission', StudentController.admissionForm);
 router.post('/students', StudentController.create);
 router.get('/students/:id', StudentController.details);
 router.post('/students/:id', StudentController.update);
 router.post('/students/:id/move-to-history', StudentController.moveToHistory);
+router.post('/students/admission/submit', StudentController.submitAdmission);
 
 // Teacher routes
 router.get('/teachers', TeacherController.list);

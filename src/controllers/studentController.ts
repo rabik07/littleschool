@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-  import { Student } from '../models/Student';
+import { Student } from '../models/Student';
+import { Admission } from '../models/Admission';
   
 
 export class StudentController {
@@ -71,6 +72,46 @@ export class StudentController {
     } catch (error) {
       console.error('Error fetching student details:', error);
       res.status(500).send('Error loading student details');
+    }
+  }
+
+  static admissionForm(req: Request, res: Response) {
+    try {
+      // Provide classes for the form dropdown if needed
+      Student.getClasses().then((classes) => {
+        res.render('students/admission', {
+          title: 'Admission Form',
+          classes
+        });
+      }).catch(err => {
+        console.warn('Could not load classes for admission form', err);
+        res.render('students/admission', { title: 'Admission Form', classes: [] });
+      });
+    } catch (error) {
+      console.error('Error showing admission form:', error);
+      res.status(500).send('Error loading admission form');
+    }
+  }
+
+  static async submitAdmission(req: Request, res: Response) {
+    try {
+      const admission = req.body || {};
+      // Add timestamps and id
+      const entry = {
+        id: String(Date.now()),
+        submittedAt: new Date().toISOString(),
+        status: admission.status || 'submitted',
+        data: admission
+      };
+
+      // Use Admission model which handles MongoDB or JSON fallback
+      const saved = await Admission.create({ data: admission, status: entry.status, submittedAt: entry.submittedAt });
+      if (req.is('application/json')) return res.json({ success: true, id: (saved as any).id });
+      res.redirect('/students');
+    } catch (error) {
+      console.error('Error submitting admission:', error);
+      if (req.is('application/json')) return res.status(500).json({ success: false, message: 'Internal error' });
+      res.status(500).send('Error submitting admission');
     }
   }
 

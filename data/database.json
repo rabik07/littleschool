@@ -186,6 +186,14 @@
       "amount": 10,
       "date": "2025-06-17T00:00:00.000Z",
       "description": "June Payment done"
+    },
+    {
+      "id": "ef4ef520-b7ba-4fe5-b15a-6ddccd88db8a",
+      "type": "student_fee",
+      "studentId": "std003",
+      "amount": 100,
+      "date": "2025-07-26",
+      "description": "july month payment done"
     }
   ],
   "history": {
