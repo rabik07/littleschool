@@ -400,6 +400,28 @@ body {
     word-wrap: break-word;
 }
 
+/* Carousel images: ensure they fill and are cropped to the container */
+.carousel {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    height: 400px;
+    overflow: hidden;
+    border-radius: 6px;
+}
+
+.carousel-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .carousel { height: 240px; }
+}
+
+
 .history-card .data-table th {
     white-space: nowrap;
 }
